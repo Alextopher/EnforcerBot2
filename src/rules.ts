@@ -63,7 +63,7 @@ rules.set("826534625345929266", function(msg) {
         msg.delete();
     }
 
-    if (Math.random() < 0.05) {
+    if (Math.random() < 0.20) {
         setTimeout(() => msg.channel.send("bot"), 7000);
     }
 });
