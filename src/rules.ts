@@ -8,7 +8,7 @@ rules.set("826491102152359936", function(msg) {
         return;
     }
 
-    const banned = [ 'ℇ', 'e', 'E', '℈', '℮', 'ℯ', 'ℰ', 'ⅇ', '🇪' ]
+    const banned = [ 'ℇ', 'e', 'E', '℈', '℮', 'ℯ', 'ℰ', 'ⅇ', '🇪', 'Ə' ]
 
     function bold(msg: string) {
         for (let i = 0; i < banned.length; i++) {
@@ -24,7 +24,7 @@ rules.set("826491102152359936", function(msg) {
 
         console.log(str, msg.content.includes(str));
         if (msg.content.includes(str)) {
-            msg.reply("fifth glyph in our orthography is not part of writing in this forum");
+//            msg.reply("fifth glyph in our orthography is not part of writing in this forum");
             msg.author?.send("Your message was cringe and included a banned character:\n> " + bold(msg.content));
             msg.delete();
             break;
@@ -44,7 +44,7 @@ rules.set("826492976640557087", function(msg) {
         let word = words[i];
 
         if (!word.includes('e') && !word.includes('E')) {
-            msg.reply("come comrade, embrace e.");
+//            msg.reply("come comrade, embrace e.");
             msg.author?.send("You forget an e in this word: `" + word + "` in this post:\n> " + msg.content);
             msg.delete();
             return;
@@ -55,6 +55,13 @@ rules.set("826492976640557087", function(msg) {
 // # no posting whatsoever
 rules.set("826181775981019156", function(msg) {
     msg.delete();
+});
+
+// # bot spam
+rules.set("826534625345929266", function(msg) {
+    if (msg.content != "bot") {
+        msg.delete();
+    }
 });
 
 module.exports = rules;
