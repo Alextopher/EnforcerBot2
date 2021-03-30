@@ -31,7 +31,13 @@ sudo docker-compose up -d
 
 ## Adding rules
 
-Rules are relatively straight forward to add. In [rules.ts](/src/rules.ts) there is a `Map` named rules that maps `channel.id` strings to a functions `(msg: Discord.Message) => void`. So adding new rules is as simple as:
+Rules are relatively straight forward to add. In [rules.ts](/src/rules.ts) there is a `Map` named rules that maps `channel.id` strings to callback functions; like so:
+
+```ts
+var rules : Map<string, (msg: Discord.Message) => void> = new Map();
+```
+
+So adding a new rule is as simple as:
 
 ```ts
 // # no posting whatsoever
