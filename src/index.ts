@@ -10,6 +10,7 @@ bot.on('ready', () => {
 });
 
 bot.on('message', (msg) => {
+    // Exclude itself
     if (msg.author.id == "826495787240390727") return;
 
     let rule = rules.get(msg.channel.id);
@@ -19,6 +20,7 @@ bot.on('message', (msg) => {
 })
 
 bot.on('messageUpdate', (_, newmsg) => {
+    // Exclude itself
     if (newmsg.author?.id == "826495787240390727") return;
 
     let rule = rules.get(newmsg.channel.id);

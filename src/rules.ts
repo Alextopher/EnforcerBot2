@@ -4,8 +4,6 @@ var rules : Map<string, (msg: Discord.Message | Discord.PartialMessage) => void>
 
 // # avoid-5
 rules.set("826491102152359936", function(msg) {    
-    console.log(msg.content);
-
     if (!msg.content) {
         return;
     }
@@ -17,7 +15,7 @@ rules.set("826491102152359936", function(msg) {
             let str = banned[i];
             msg = msg.replace(str, "**" + str + "**");
         }
-        
+
         return msg;
     }
 
@@ -36,23 +34,22 @@ rules.set("826491102152359936", function(msg) {
 
 // # embrace-e
 rules.set("826492976640557087", function(msg) {
-    console.log(msg.content);
-
     if (!msg.content) {
         return;
     }
 
-    let words = msg.content.split("/\s/g");
+    let words = msg.content.split(/[\;\:\.\,\s]+/);
     
-    console.log(words);
+    for (let i = 0; i < words.length; i++) {
+        let word = words[i];
 
-    words.forEach(word => {
-        if (!msg.content?.includes('e') || !msg.content?.includes('E')) {
-            msg.reply("#embrace-e");
-            msg.author?.send("You forget an `e` in this word: `" + word + "` in this post:\n> " + msg.content);
+        if (!word.includes('e') && !word.includes('E')) {
+            msg.reply("come comrade, embrace e.");
+            msg.author?.send("You forget an e in this word: `" + word + "` in this post:\n> " + msg.content);
             msg.delete();
+            return;
         }
-    });
+    }
 })
 
 module.exports = rules;
