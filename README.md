@@ -31,7 +31,7 @@ sudo docker-compose up -d
 
 ## Adding rules
 
-Rules are relatively straight forward to add. In [rules.ts](/src/rules.ts) there is a `Map` name rules that maps `channel.id` strings to a functions `(msg: Discord.Message) => void`. So adding new rules is really simple:
+Rules are relatively straight forward to add. In [rules.ts](/src/rules.ts) there is a `Map` named rules that maps `channel.id` strings to a functions `(msg: Discord.Message) => void`. So adding new rules is as simple as:
 
 ```ts
 // # no posting whatsoever
@@ -40,7 +40,7 @@ rules.set("826181775981019156", function(msg) {
 });
 ```
 
-Whenever a message is posted or edited [index.ts](/src/index.ts) will check if `msg.channel.id` has an associated function and then calls the function on the message.
+Now whenever a message is posted or edited [index.ts](/src/index.ts) will check if `msg.channel.id` has an associated function and, if so, it will call that with `msg`:
 
 ```ts
 // get the rule
