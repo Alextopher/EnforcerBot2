@@ -50,6 +50,11 @@ rules.set("826492976640557087", function(msg) {
             return;
         }
     }
-})
+});
+
+// # no posting whatsoever
+rules.set("826181775981019156", function(msg) {
+    msg.delete();
+});
 
 module.exports = rules;
