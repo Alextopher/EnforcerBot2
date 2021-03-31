@@ -3,7 +3,7 @@ import Discord = require('discord.js');
 var rules : Map<string, (msg: Discord.Message | Discord.PartialMessage) => void> = new Map();
 
 // # avoid-5
-rules.set("826491102152359936", function(msg) {    
+rules.set("826868893905322024", function(msg) {    
     if (!msg.content) {
         return;
     }
@@ -33,7 +33,7 @@ rules.set("826491102152359936", function(msg) {
 });
 
 // # embrace-e
-rules.set("826492976640557087", function(msg) {
+rules.set("826868953761710140", function(msg) {
     if (!msg.content) {
         return;
     }
@@ -53,12 +53,12 @@ rules.set("826492976640557087", function(msg) {
 });
 
 // # no posting whatsoever
-rules.set("826181775981019156", function(msg) {
+rules.set("826869062541639682", function(msg) {
     msg.delete();
 });
 
 // # bot spam
-rules.set("826534625345929266", function(msg) {
+rules.set("826868377024593930", function(msg) {
     if (msg.content != "bot") {
         msg.delete();
     }

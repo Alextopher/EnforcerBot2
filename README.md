@@ -1,6 +1,6 @@
 # EnforcerBot2
 
-Discord bot that enforces the rules on the Potsdam ∩ COSI server. The bot is currently running on dubsdot2.
+Discord bot that enforces the rules on my server. The bot is currently running on dubsdot2.
 
 ## Running
 
