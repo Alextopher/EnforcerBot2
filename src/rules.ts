@@ -68,4 +68,24 @@ rules.set("826868377024593930", function(msg) {
     }
 });
 
+// # odd
+rules.set("834816504939675688", function(msg) {
+    let discriminator = parseInt(msg.author!.discriminator);
+
+    // yeet even users
+    if (discriminator % 2 == 0) {
+        msg.delete();
+    }
+});
+
+// # even
+rules.set("834816520856666172", function(msg) {
+    let discriminator = parseInt(msg.author!.discriminator);
+    
+    // yeet even users
+    if (discriminator % 2 == 1) {
+        msg.delete();
+    }
+});
+
 module.exports = rules;
