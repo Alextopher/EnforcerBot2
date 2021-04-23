@@ -24,7 +24,6 @@ rules.set("826868893905322024", function(msg) {
 
         console.log(str, msg.content.includes(str));
         if (msg.content.includes(str)) {
-//            msg.reply("fifth glyph in our orthography is not part of writing in this forum");
             msg.author?.send("Your message was cringe and included a banned character:\n> " + bold(msg.content));
             msg.delete();
             break;
@@ -38,13 +37,17 @@ rules.set("826868953761710140", function(msg) {
         return;
     }
 
-    let words = msg.content.split(/[\;\:\.\,\s]+/);
-    
+    let words = msg.content.split(/[\s]+/);
+
     for (let i = 0; i < words.length; i++) {
         let word = words[i];
 
-        if (!word.includes('e') && !word.includes('E')) {
-//            msg.reply("come comrade, embrace e.");
+        if (Discord.MessageMentions.CHANNELS_PATTERN.test(word) || Discord.MessageMentions.EVERYONE_PATTERN.test(word)
+         || Discord.MessageMentions.ROLES_PATTERN.test(word) || Discord.MessageMentions.USERS_PATTERN.test(word)) {
+            continue;
+        }
+
+        if (!word.includes('e') && !word.includes('E') ) {
             msg.author?.send("You forget an e in this word: `" + word + "` in this post:\n> " + msg.content);
             msg.delete();
             return;
@@ -82,7 +85,7 @@ rules.set("834816504939675688", function(msg) {
 rules.set("834816520856666172", function(msg) {
     let discriminator = parseInt(msg.author!.discriminator);
     
-    // yeet even users
+    // yeet odd users
     if (discriminator % 2 == 1) {
         msg.delete();
     }
