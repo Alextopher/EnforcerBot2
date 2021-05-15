@@ -2,6 +2,13 @@ import Discord = require('discord.js');
 
 var rules : Map<string, (msg: Discord.Message | Discord.PartialMessage) => void> = new Map();
 
+function handle_rules(msg: Discord.Message | Discord.PartialMessage) {
+    let rule = rules.get(msg.channel.id);
+    if (rule != undefined) {
+        rule(msg);
+    }
+}
+
 // # avoid-5
 rules.set("826868893905322024", function(msg) {    
     if (!msg.content) {
@@ -91,4 +98,4 @@ rules.set("834816520856666172", function(msg) {
     }
 });
 
-module.exports = rules;
+module.exports = handle_rules;

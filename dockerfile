@@ -1,5 +1,8 @@
 FROM node:14-alpine
 
+# Add sqlite package
+RUN apk add sqlite
+
 # Create app directory
 WORKDIR /usr/src/app
 
