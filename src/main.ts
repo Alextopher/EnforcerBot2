@@ -1,11 +1,8 @@
 require('dotenv').config();
 
 import Discord = require('discord.js');
-var handle_rules = require('./rules');
+import handle_rules from './rules';
 var [letters_messages, letters_reactions] = require('./letters');
-import User = require('./db');
-
-
 
 const bot = new Discord.Client();
 

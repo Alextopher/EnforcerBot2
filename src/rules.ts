@@ -10,26 +10,24 @@ function handle_rules(msg: Discord.Message | Discord.PartialMessage) {
 }
 
 // # avoid-5
+const banned = [ 'ℇ', 'e', 'E', '℈', '℮', 'ℯ', 'ℰ', 'ⅇ', '🇪', 'Ə' ]
+function bold(msg: string) {
+    for (let i = 0; i < banned.length; i++) {
+        let str = banned[i];
+        msg = msg.replace(str, "**" + str + "**");
+    }
+
+    return msg;
+}
+
 rules.set("826868893905322024", function(msg) {    
     if (!msg.content) {
         return;
     }
 
-    const banned = [ 'ℇ', 'e', 'E', '℈', '℮', 'ℯ', 'ℰ', 'ⅇ', '🇪', 'Ə' ]
-
-    function bold(msg: string) {
-        for (let i = 0; i < banned.length; i++) {
-            let str = banned[i];
-            msg = msg.replace(str, "**" + str + "**");
-        }
-
-        return msg;
-    }
-
     for (let i = 0; i < banned.length; i++) {
         let str = banned[i];
 
-        console.log(str, msg.content.includes(str));
         if (msg.content.includes(str)) {
             msg.author?.send("Your message was cringe and included a banned character:\n> " + bold(msg.content));
             msg.delete();
@@ -98,4 +96,4 @@ rules.set("834816520856666172", function(msg) {
     }
 });
 
-module.exports = handle_rules;
+export default handle_rules;
