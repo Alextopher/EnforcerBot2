@@ -7,7 +7,8 @@ import { scheduleJob } from 'node-schedule';
 
 const bot = new Discord.Client();
 
-scheduleJob('35 30 7 * * *', async () => {
+// Schedule is UTC
+scheduleJob('35 30 12 * * *', async () => {
     console.log("Sending APOD")
     const channel = bot.channels.cache.get("826845551122710539") as Discord.TextChannel
 
