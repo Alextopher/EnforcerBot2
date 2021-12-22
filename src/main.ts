@@ -2,20 +2,35 @@ require('dotenv').config();
 
 import Discord = require('discord.js');
 import handle_rules from './rules';
-var [letters_messages, letters_reactions] = require('./letters');
+import sendAPOD from './apod';
+import { scheduleJob } from 'node-schedule';
 
 const bot = new Discord.Client();
+
+scheduleJob('35 30 7 * * *', async () => {
+    console.log("Sending APOD")
+    const channel = bot.channels.cache.get("826845551122710539") as Discord.TextChannel
+
+    if (!channel) {
+        console.log("Failed to load channel to send APOD!")
+    } else {
+        sendAPOD(channel)
+    }
+});
 
 bot.on('ready', () => {
     console.info(`Logged in as ${bot.user!.tag}!`);
 });
 
-bot.on('message', (msg) => {
+bot.on('message', async msg => {
     // Exclude itself
     if (msg.author.id == "826495787240390727") return;
 
+    if (msg.content.startsWith("apod")) {
+        sendAPOD(msg.channel)
+    }
+
     handle_rules(msg);
-    letters_messages(msg);
 });
 
 bot.on('messageUpdate', (_, newmsg) => {
@@ -23,11 +38,6 @@ bot.on('messageUpdate', (_, newmsg) => {
     if (newmsg.author?.id == "826495787240390727") return;
 
     handle_rules(newmsg);
-    letters_messages(newmsg);
-});
-
-bot.on('messageReactionAdd', (reaction, user) => {
-    letters_reactions(reaction, user);
 });
 
 bot.login(process.env.TOKEN);
