@@ -29,7 +29,7 @@ rules.set("826868893905322024", function(msg) {
         let str = banned[i];
 
         if (msg.content.includes(str)) {
-            msg.author?.send("Your message was cringe and included a banned character:\n> " + bold(msg.content));
+            msg.author!.send("Your message was cringe and included a banned character:\n> " + bold(msg.content));
             msg.delete();
             break;
         }
@@ -53,7 +53,7 @@ rules.set("826868953761710140", function(msg) {
         }
 
         if (!word.includes('e') && !word.includes('E') ) {
-            msg.author?.send("You forget an e in this word: `" + word + "` in this post:\n> " + msg.content);
+            msg.author!.send("You forget an e in this word: `" + word + "` in this post:\n> " + msg.content);
             msg.delete();
             return;
         }

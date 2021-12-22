@@ -36,17 +36,21 @@ async function apod() {
     })
 }
 
-export default async function sendAPOD(channel: Discord.Message["channel"]) {
+async function getAPODEmbed() {
     const embed = new Discord.MessageEmbed();
 
-    apod().then(res => {
+    await apod().then(res => {
         embed.setTitle(res.title)
             .setImage(res.hdurl)
             .setAuthor(res.copyright + " " + res.date)
             .setColor('RED');
-    }).then(() => {
-        channel.send(embed);
-    }).catch(error => {
-        console.log("Failed to send APOD", error);
-    })
+    });
+
+    return embed;
 }
+
+async function sendAPODEmbded(channel: Discord.Message["channel"]) {
+    channel.send({embeds: [await getAPODEmbed()]});
+}
+
+export { sendAPODEmbded, getAPODEmbed }

@@ -1,4 +1,4 @@
-FROM node:14 as build
+FROM node:16 as build
 
 # Create app directory
 WORKDIR /app
@@ -13,7 +13,7 @@ RUN npm run build
 
 
 # Production
-FROM node:14
+FROM node:16
 
 # Create app directory
 WORKDIR /app

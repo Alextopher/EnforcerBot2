@@ -1,35 +1,46 @@
 require('dotenv').config();
 
-import Discord = require('discord.js');
-import handle_rules from './rules';
-import sendAPOD from './apod';
 import { scheduleJob } from 'node-schedule';
 
-const bot = new Discord.Client();
+import { Client, Intents, TextChannel } from 'discord.js';
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/v9';
 
-// Schedule is UTC
+import handle_rules from './rules';
+import { get_interactions_json, handle_interactions } from './interactions';
+import { sendAPODEmbded } from './apod';
+
+const bot = new Client({
+    intents: [ Intents.FLAGS.GUILD_INTEGRATIONS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MESSAGE_REACTIONS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.DIRECT_MESSAGE_REACTIONS ]
+});
+
+// Schedule APOD (UTC)
 scheduleJob('35 30 12 * * *', async () => {
-    console.log("Sending APOD")
-    const channel = bot.channels.cache.get("826845551122710539") as Discord.TextChannel
+    console.log(Date(), "Sending APOD")
+    const channel = bot.channels.cache.get("826845551122710539") as TextChannel;
 
     if (!channel) {
-        console.log("Failed to load channel to send APOD!")
+        console.log("Failed to load channel to send APOD!");
     } else {
-        sendAPOD(channel)
+        sendAPODEmbded(channel);
     }
 });
 
 bot.on('ready', () => {
     console.info(`Logged in as ${bot.user!.tag}!`);
+
+    rest.put(Routes.applicationGuildCommands(bot.user!.id, "678782910417076280"), { body: get_interactions_json() })
+        .then(() => console.log('Successfully registered guild commands.'))
+        .catch(console.error);
 });
+
+bot.on("interactionCreate", async interaction => {
+    handle_interactions(interaction);
+})
 
 bot.on('message', async msg => {
     // Exclude itself
     if (msg.author.id == "826495787240390727") return;
-
-    if (msg.content.startsWith("apod")) {
-        sendAPOD(msg.channel)
-    }
 
     handle_rules(msg);
 });
@@ -42,3 +53,4 @@ bot.on('messageUpdate', (_, newmsg) => {
 });
 
 bot.login(process.env.TOKEN);
+const rest = new REST({ version: '9' }).setToken(process.env.TOKEN!);
