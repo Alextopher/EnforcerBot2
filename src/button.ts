@@ -67,7 +67,7 @@ async function updateRoles(guild: Guild) {
     });
 }
 
-function pushButton(user: GuildMember) {
+async function pushButton(user: GuildMember) {
     const color = getColor(user.guild);
 
     if (!color) {
@@ -84,7 +84,7 @@ function pushButton(user: GuildMember) {
     buttonStorage.setItem(user.guild.id, Date.now().toString());
 
     // Update the channel
-    updateChannel(user.guild);
+    await updateChannel(user.guild);
 
     return `${user.displayName} has pushed the button.`
 }
