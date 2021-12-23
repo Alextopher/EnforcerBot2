@@ -5,7 +5,6 @@ import { LocalStorage } from  "node-localstorage"
 var buttonStorage = new LocalStorage("./button");
 
 const colors: ColorResolvable[] = [
-    "GREY",
     "PURPLE",
     "BLUE",
     "GREEN",   
@@ -23,7 +22,6 @@ let colorToEmoji: Map<ColorResolvable, string> = new Map([
     ["YELLOW", "🟡"],
     ["ORANGE", "🟠"],
     ["RED", "🔴"],
-    ["GREY", "⚪"]
 ]);
 
 // let colorToDays: Map<string, number> = new Map([
@@ -86,7 +84,7 @@ async function pushButton(user: GuildMember) {
     // Update the channel
     await updateChannel(user.guild);
 
-    return `${user.displayName} has pushed the button.`
+    return `${user.displayName} has pushed the button and has become ${color}.`
 }
 
 function getColor(guild: Guild) {
