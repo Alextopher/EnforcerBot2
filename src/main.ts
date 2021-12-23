@@ -29,7 +29,7 @@ scheduleJob('35 30 12 * * *', async () => {
 });
 
 // Update the color of the button every hour
-scheduleJob("0 0 * * * *", async () => {
+scheduleJob("0 */15 * * * *", async () => {
     let guild = await bot.guilds.fetch("678782910417076280");
 
     await updateChannel(guild).then(console.log);
