@@ -25,7 +25,7 @@ interactions.set("apod", [new SlashCommandBuilder().setName("apod").setDescripti
 }]);
 
 interactions.set("push", [new SlashCommandBuilder().setName("push").setDescription("Push the button"), async interaction => {
-    interaction.reply(pushButton(interaction.member as GuildMember));
+    interaction.reply(await pushButton(interaction.member as GuildMember));
 }]);
 
 interactions.set("start", [new SlashCommandBuilder().setName("start").setDescription("Start the button"), async interaction => {
