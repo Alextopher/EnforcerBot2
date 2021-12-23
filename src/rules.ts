@@ -62,7 +62,7 @@ rules.set("826868953761710140", function(msg) {
 
 // # no posting whatsoever
 rules.set("826869062541639682", function(msg) {
-    msg.delete();
+    msg.channel.messages.fetch().then(messages => messages.forEach(m => m.delete()));
 });
 
 // # bot spam

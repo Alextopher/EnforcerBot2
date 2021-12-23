@@ -1,6 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { Interaction, CommandInteraction, CacheType, Awaitable } from 'discord.js';
+import { Interaction, CommandInteraction, CacheType, Awaitable, GuildMember } from 'discord.js';
 import { getAPODEmbed } from './apod';
+import { pushButton, startButton } from './button';
 
 var interactions : Map<String, [SlashCommandBuilder, (interaction: CommandInteraction<CacheType>) => Awaitable<void>]> = new Map();
 
@@ -19,16 +20,25 @@ function handle_interactions(interaction: Interaction<CacheType>) {
     }
 }
 
-interactions.set("ping", [new SlashCommandBuilder().setName("ping").setDescription("Replies with pong!"), interaction => {  
-    interaction.reply("Pong!");
-}]);
-
-interactions.set("pong", [new SlashCommandBuilder().setName("pong").setDescription("Replies with ping!"), interaction => {    
-    interaction.reply("Ping!");
-}]);
-
 interactions.set("apod", [new SlashCommandBuilder().setName("apod").setDescription("Sends NASA's Astromy Picture of The Day"), async interaction => {
     interaction.reply( {embeds: [await getAPODEmbed()]});
+}]);
+
+interactions.set("push", [new SlashCommandBuilder().setName("push").setDescription("Push the button"), async interaction => {
+    interaction.reply(pushButton(interaction.member as GuildMember));
+}]);
+
+interactions.set("start", [new SlashCommandBuilder().setName("start").setDescription("Start the button"), async interaction => {
+    if (interaction.member.user.id !== "539108568285184001") {
+        interaction.reply("sucks to suck you don't have the privledge");
+    } else {
+        interaction.reply(startButton(interaction.guild!));
+    }
+}]);
+
+interactions.set("ping", [new SlashCommandBuilder().setName("ping").setDescription("check"), async interaction => {
+    const sent: any = await interaction.reply({ content: 'Pinging...', fetchReply: true });
+    interaction.editReply(`Roundtrip latency: ${sent.createdTimestamp - interaction.createdTimestamp}ms`);
 }]);
 
 
