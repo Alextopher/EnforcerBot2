@@ -73,11 +73,11 @@ class Challenge {
         this.time = Date.now();
     }
 
-    resolve(): [winner: GuildMember | null, message: string] | null {
+    resolve(): [winner: GuildMember | null | "TIE" | "REPEAT", message: string] | null {
         // Nobody responded
         if (!this.defenderThrows && !this.challengerThrows) {
             if (Date.now() - this.time > CHALLENGE_TIME) {
-                return [null, `Go home everyone. Neither ${this.defender} or ${this.challenger} responded to the challenge.`];
+                return ["TIE", `Go home everyone. Neither ${this.defender} or ${this.challenger} responded to the challenge.`];
             } else {
                 // There is still time
                 return null;
@@ -86,7 +86,7 @@ class Challenge {
 
         // Both players rejected the challenge (this should never happen)
         if (this.challengerThrows == "REJECT" && this.defenderThrows == "REJECT") {
-            return [null, `${this.challenger} back downed and ${this.defender} rejected the challenge. Can we all be friends now?`];
+            return ["TIE", `${this.challenger} back downed and ${this.defender} rejected the challenge. Can we all be friends now?`];
         }
 
         // Challenger rejected the challenge
@@ -114,14 +114,17 @@ class Challenge {
 
         switch (result) {
             case -1:
-                return [this.defender, `${this.challenger} threw ${this.challengerThrows} | ${this.defender} threw ${this.defenderThrows} | ${this.defender} **WINS**.`]
+                return [this.defender, `${this.challenger} threw ${this.challengerThrows} | ${this.defender} threw ${this.defenderThrows} | ${this.defender} **WINS**.`];
             case 0:
                 // Tie
+                const temp = this.challengerThrows;
+
                 this.challengerThrows = undefined;
                 this.defenderThrows = undefined;
-                return [null, `**TIE** both players threw ${this.challengerThrows}, throw again.`]
+                this.time = Date.now();
+                return ["REPEAT", `**TIE** both players threw ${temp}, throw again with \`/rock\`, \`/paper\`, \`/scissors\`, or \`/reject\`.`];
             case 1:
-                return [this.challenger, `${this.challenger} threw ${this.challengerThrows} | ${this.defender} threw ${this.defenderThrows} | ${this.challenger} **WINS**.`]
+                return [this.challenger, `${this.challenger} threw ${this.challengerThrows} | ${this.defender} threw ${this.defenderThrows} | ${this.challenger} **WINS**.`];
         }
     }
 }
@@ -174,11 +177,13 @@ function rpsThrow(thrower: GuildMember, t: Throw): InteractionReplyOptions {
 
     // If both players have responded resolve the competetion
     if (t === "REJECT" || (challenge.challengerThrows && challenge.defenderThrows)) {
-        const [_winner, message] = challenge.resolve()!;
+        const [winner, message] = challenge.resolve()!;
 
-        // Remove the challenge after completion
-        activeChallenges.delete(challenge.challenger.guild.id + challenge.challenger.id);
-        activeChallenges.delete(challenge.defender.guild.id + challenge.defender.id);
+        if (winner != "REPEAT") {
+            // Remove the challenge after completion
+            activeChallenges.delete(challenge.challenger.guild.id + challenge.challenger.id);
+            activeChallenges.delete(challenge.defender.guild.id + challenge.defender.id);
+        } 
 
         return {ephemeral: false, content: message};
     } else {
