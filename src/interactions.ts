@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { Interaction, CommandInteraction, CacheType, Awaitable, GuildMember } from 'discord.js';
 import { getAPODEmbed } from './apod';
-import { pushButton, startButton } from './button';
+import { getStartTime, pushButton, startButton, updateChannel } from './button';
 
 var interactions : Map<String, [SlashCommandBuilder, (interaction: CommandInteraction<CacheType>) => Awaitable<void>]> = new Map();
 
@@ -26,6 +26,15 @@ interactions.set("apod", [new SlashCommandBuilder().setName("apod").setDescripti
 
 interactions.set("push", [new SlashCommandBuilder().setName("push").setDescription("Push the button"), async interaction => {
     interaction.reply(await pushButton(interaction.member as GuildMember));
+}]);
+
+interactions.set("update", [new SlashCommandBuilder().setName("update").setDescription("update the button"), async interaction => {
+    let respose = await updateChannel(interaction.guild!);
+    if (!respose) {
+        respose = "Failed to update button";
+    }
+
+    interaction.reply(respose + ". Start Time: " + getStartTime(interaction.guild!));
 }]);
 
 interactions.set("start", [new SlashCommandBuilder().setName("start").setDescription("Start the button"), async interaction => {
