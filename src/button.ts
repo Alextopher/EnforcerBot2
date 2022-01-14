@@ -24,16 +24,6 @@ let colorToEmoji: Map<ColorResolvable, string> = new Map([
     ["RED", "🔴"],
 ]);
 
-// let colorToDays: Map<string, number> = new Map([
-//     ["GREY", 0],
-//     ["PURPLE", 1],
-//     ["BLUE", 2],
-//     ["GREEN",  3],
-//     ["YELLOW", 4],
-//     ["ORANGE", 5],
-//     ["RED", 6],
-// ]);
-
 function startButton(guild: Guild) {
     buttonStorage.setItem(guild.id, Date.now().toString());
     return Date.now().toString();
@@ -73,7 +63,6 @@ async function pushButton(user: GuildMember) {
     }
 
     // Remove all other color roles and then add the new color
-    console.log([...rolesMap.values()])
     user.roles.remove([...rolesMap.values()]).then(user => {
         user.roles.add(rolesMap.get(color)!);
     });
@@ -125,8 +114,7 @@ async function updateChannel(guild: Guild) {
         name = "button";
     }
 
-    console.log(color, name);
-    return channel.setName(name).then(newChannel => `Channel's new name is ${newChannel.name}`);
+    return channel.setName(name).then(newChannel => `Channel's new name is ${newChannel.name}`).catch(console.log);
 }
 
 export { pushButton, updateRoles, startButton, updateChannel }
