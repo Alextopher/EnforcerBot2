@@ -1,8 +1,8 @@
-import { Client, ColorResolvable, Guild, GuildMember, Role } from "discord.js"
+import { ColorResolvable, Guild, GuildMember, Role } from "discord.js"
 import { LocalStorage } from  "node-localstorage"
 
 // Setup local storage
-var buttonStorage = new LocalStorage("./button");
+var buttonStorage = new LocalStorage("/button");
 
 const colors: ColorResolvable[] = [
     "PURPLE",
@@ -76,6 +76,10 @@ async function pushButton(user: GuildMember) {
     return `${user.displayName} has pushed the button and has become ${color}.`
 }
 
+function getStartTime(guild: Guild) {
+    return buttonStorage.getItem(guild.id)
+}
+
 function getColor(guild: Guild) {
     let lastPressed = buttonStorage.getItem(guild.id);
 
@@ -86,14 +90,14 @@ function getColor(guild: Guild) {
     let currentTime = Date.now();
     let difference = currentTime - parseInt(lastPressed);
     
-    // Compute difference in milliseconds to diffence in days
-    let days = Math.floor(difference / (1000 * 60 * 60 * 24));
+    // Compute difference in milliseconds to diffence in colors
+    let color = Math.floor(difference / (1000 * 60 * 60 * 6));
 
-    if (days > 6) {
+    if (color > 6) {
         return;
     }
 
-    return colors[days];
+    return colors[color];
 }
 
 async function updateChannel(guild: Guild) {
@@ -117,4 +121,4 @@ async function updateChannel(guild: Guild) {
     return channel.setName(name).then(newChannel => `Channel's new name is ${newChannel.name}`).catch(console.log);
 }
 
-export { pushButton, updateRoles, startButton, updateChannel }
+export { pushButton, updateRoles, startButton, updateChannel, getStartTime }
