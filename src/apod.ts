@@ -41,7 +41,7 @@ async function getAPODEmbed() {
 
     await apod().then(res => {
         embed.setTitle(res.title)
-            .setImage(res.hdurl)
+            .setImage(res.hdurl ?? res.url)
             .setAuthor(res.copyright + " " + res.date)
             .setColor('RED');
     });
