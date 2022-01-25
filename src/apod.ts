@@ -9,12 +9,13 @@ type APOD = {
     media_type: string,
     service_version: string,
     title: string,
-    url: string 
+    url: string,
+    thumbnail_url: string
 }
 
 async function apod() {
     return new Promise<APOD>((resolve, reject) => {
-        const req = https.request(`https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_KEY}`, res => {
+        const req = https.request(`https://api.nasa.gov/planetary/apod?api_key=${process.env.NASA_KEY}&thumbs=True`, res => {
             let data = '';
             res.on("data", chunk => {
                 data = data + chunk.toString();
@@ -36,17 +37,22 @@ async function apod() {
     })
 }
 
-async function getAPODEmbed() {
+async function getAPODEmbed() : Promise<Discord.MessageEmbed> {
     const embed = new Discord.MessageEmbed();
+    let response = await apod();
 
-    await apod().then(res => {
-        embed.setTitle(res.title)
-            .setImage(res.hdurl ?? res.url)
-            .setAuthor(res.copyright + " " + res.date)
-            .setColor('RED');
-    });
+    embed.setTitle(response.title)
+        .setAuthor(response.copyright)
+        .setColor('RED');
+    
+    if (response.media_type == "image") {
+        embed.setImage(response.hdurl ?? response.url)
+    } else {
+        embed.setDescription(response.hdurl ?? response.url)
+            .setImage(response.thumbnail_url)
+    }
 
-    return embed;
+    return embed
 }
 
 async function sendAPODEmbded(channel: Discord.Message["channel"]) {

@@ -23,7 +23,7 @@ function handle_interactions(interaction: Interaction<CacheType>) {
 
 // APOD
 interactions.set("apod", [new SlashCommandBuilder().setName("apod").setDescription("Sends NASA's Astromy Picture of The Day"), async interaction => {
-    interaction.reply( {embeds: [await getAPODEmbed()]});
+    interaction.reply({embeds: [await getAPODEmbed()]});
 }]);
 
 // BUTTON
